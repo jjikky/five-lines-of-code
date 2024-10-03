@@ -93,14 +93,11 @@ function moveVertical(dy: number) {
 }
 
 function update() {
-  while (inputs.length > 0) {
-    let current = inputs.pop();
-    if (current === Input.LEFT) moveHorizontal(-1);
-    else if (current === Input.RIGHT) moveHorizontal(1);
-    else if (current === Input.UP) moveVertical(-1);
-    else if (current === Input.DOWN) moveVertical(1);
-  }
+  handleInputs();
+  updateMap();
+}
 
+function updateMap() {
   for (let y = map.length - 1; y >= 0; y--) {
     for (let x = 0; x < map[y].length; x++) {
       if (
@@ -124,14 +121,27 @@ function update() {
   }
 }
 
+function handleInputs() {
+  while (inputs.length > 0) {
+    let current = inputs.pop();
+    if (current === Input.LEFT) moveHorizontal(-1);
+    else if (current === Input.RIGHT) moveHorizontal(1);
+    else if (current === Input.UP) moveVertical(-1);
+    else if (current === Input.DOWN) moveVertical(1);
+  }
+}
+
 function draw() {
-  let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
-  let g = canvas.getContext("2d");
-
-  g.clearRect(0, 0, canvas.width, canvas.height);
-
+  let g = createGraphics();
   drawMap(g);
   drawPlayer(g);
+}
+
+function createGraphics() {
+  let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
+  let g = canvas.getContext("2d");
+  g.clearRect(0, 0, canvas.width, canvas.height);
+  return g;
 }
 
 function gameLoop() {
